@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>好大一颗菜 - 小猫厨房</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            padding-bottom: 130px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #6db85c 0%, #8bc34a 100%);
+            padding: 20px;
+            padding-top: 40px;
+            color: white;
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: #f5f5f5;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .shop-card {
+            background: white;
+            margin: 15px;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .shop-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+        
+        .shop-info h2 {
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #2d3436;
+        }
+        
+        .shop-info p {
+            font-size: 12px;
+            color: #636e72;
+        }
+        
+        .category-nav {
+            display: flex;
+            padding: 10px 15px;
+            overflow-x: auto;
+            background: white;
+            margin: 0 15px 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .category-nav::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category-item {
+            padding: 6px 16px;
+            margin-right: 10px;
+            white-space: nowrap;
+            border-radius: 20px;
+            background: #f0f0f0;
+            color: #636e72;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-item.active {
+            background: #8bc34a;
+            color: white;
+        }
+        
+        .content {
+            padding: 0 15px;
+        }
+        
+        .category-title {
+            font-size: 15px;
+            color: #2d3436;
+            margin: 15px 0 10px;
+            padding-left: 8px;
+            border-left: 3px solid #8bc34a;
+            font-weight: 600;
+        }
+        
+        .menu-item {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
+        
+        .menu-item:active {
+            transform: scale(0.98);
+        }
+        
+        .menu-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .menu-details {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .menu-details h3 {
+            font-size: 14px;
+            margin-bottom: 3px;
+            color: #2d3436;
+            font-weight: 600;
+        }
+        
+        .menu-details p {
+            font-size: 11px;
+            color: #b2bec3;
+            margin-bottom: 6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .stars {
+            color: #f9ca24;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        
+        .menu-price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e17055;
+        }
+        
+        .add-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6db85c 0%, #8bc34a 100%);
+            color: white;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(109, 184, 92, 0.4);
+            transition: all 0.2s;
+        }
+        
+        .add-btn:active {
+            transform: scale(0.9);
+        }
+        
+        .cart-bar {
+            position: fixed;
+            bottom: 50px;
+            left: 15px;
+            right: 15px;
+            background: white;
+            border-radius: 25px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 100;
+        }
+        
+        .cart-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 12px;
+            position: relative;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e17055;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .cart-info {
+            flex: 1;
+        }
+        
+        .cart-total {
+            font-weight: bold;
+            font-size: 15px;
+            color: #2d3436;
+        }
+        
+        .cart-total span {
+            color: #e17055;
+            font-size: 18px;
+        }
+        
+        .cart-count {
+            font-size: 11px;
+            color: #b2bec3;
+        }
+        
+        .order-btn {
+            background: linear-gradient(135deg, #6db85c 0%, #8bc34a 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(109, 184, 92, 0.4);
+            transition: all 0.2s;
+        }
+        
+        .order-btn:disabled {
+            background: #dfe6e9;
+            box-shadow: none;
+        }
+        
+        .order-btn:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            border-top: 1px solid #f0f0f0;
+            z-index: 99;
+        }
+        
+        .nav-item {
+            text-align: center;
+            font-size: 10px;
+            color: #b2bec3;
+            flex: 1;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .nav-item.active {
+            color: #8bc34a;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 200;
+            align-items: flex-end;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            width: 100%;
+            max-height: 70vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        .modal-title {
+            font-size: 17px;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2d3436;
+            font-weight: 600;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .cart-item-name {
+            flex: 1;
+            font-size: 14px;
+            color: #2d3436;
+        }
+        
+        .cart-item-price {
+            color: #e17055;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .remove-btn {
+            background: #ff7675;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .submit-order {
+            background: linear-gradient(135deg, #6db85c 0%, #8bc34a 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 14px;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(109, 184, 92, 0.4);
+        }
+        
+        .submit-order:active {
+            transform: scale(0.98);
+        }
+        
+        .close-modal {
+            text-align: center;
+            color: #b2bec3;
+            margin-top: 12px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: none;
+            z-index: 300;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .dice-animation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 80px;
+            display: none;
+            z-index: 250;
+            animation: spin 0.5s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .empty-cart {
+            text-align: center;
+            color: #b2bec3;
+            padding: 30px 0;
+            font-size: 14px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: rotate 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div style="font-size: 18px; font-weight: bold;">好大一颗菜 🥬</div>
+    </div>
+    
+    <div class="shop-card">
+        <div class="shop-logo">🐱</div>
+        <div class="shop-info">
+            <h2>小猫厨房</h2>
+            <p>共32个菜谱 · 爱心制作</p>
+        </div>
+    </div>
+    
+    <div class="category-nav">
+        <div class="category-item active">日常服务</div>
+        <div class="category-item">小情绪</div>
+        <div class="category-item">申请</div>
+        <div class="category-item">美味制作</div>
+        <div class="category-item">我要玩游戏</div>
+    </div>
+    
+    <div class="content">
+        <h3 class="category-title">日常服务 (6)</h3>
+        
+        <div class="menu-item">
+            <div class="menu-icon">🐭</div>
+            <div class="menu-details">
+                <h3>快来陪我！</h3>
+                <p>下单小罗即可闪现 ✨</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="menu-price">
+                    <span class="price">💚 0</span>
+                    <button class="add-btn" onclick="addToCart('快来陪我！', 0)">+</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item">
+            <div class="menu-icon">🐰</div>
+            <div class="menu-details">
+                <h3>你在干嘛</h3>
+                <p>可获得小罗一天行程 📅</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="menu-price">
+                    <span class="price">💚 0</span>
+                    <button class="add-btn" onclick="addToCart('你在干嘛', 0)">+</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item">
+            <div class="menu-icon">😽</div>
+            <div class="menu-details">
+                <h3>想要亲亲</h3>
+                <p>😙😙😙 亲亲抱抱举高高</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="menu-price">
+                    <span class="price">💚 0</span>
+                    <button class="add-btn" onclick="addToCart('想要亲亲', 0)">+</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item">
+            <div class="menu-icon">😸</div>
+            <div class="menu-details">
+                <h3>捏脸</h3>
+                <p>轻轻捏一捏你的小脸蛋</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="menu-price">
+                    <span class="price">💚 0</span>
+                    <button class="add-btn" onclick="addToCart('捏脸', 0)">+</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item">
+            <div class="menu-icon">🤗</div>
+            <div class="menu-details">
+                <h3>摸摸头</h3>
+                <p>可以摸摸小唐的头嘛 🥺</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="menu-price">
+                    <span class="price">💚 0</span>
+                    <button class="add-btn" onclick="addToCart('摸摸头', 0)">+</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item">
+            <div class="menu-icon">🎲</div>
+            <div class="menu-details">
+                <h3>随机点菜</h3>
+                <p>让命运决定今天吃什么</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="menu-price">
+                    <span class="price">💚 0</span>
+                    <button class="add-btn" onclick="randomOrder()" style="font-size: 16px;">🎲</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cart-bar">
+        <div class="cart-icon">
+            🛒
+            <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+        </div>
+        <div class="cart-info">
+            <div class="cart-total">合计: <span id="cartTotal">0</span> 元</div>
+            <div class="cart-count">共 <span id="cartCount">0</span> 件</div>
+        </div>
+        <button class="order-btn" id="orderBtn" onclick="showCart()" disabled>邀请下单</button>
+    </div>
+    
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">🍽️</div>
+            <div>菜谱</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">📋</div>
+            <div>订单</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">✈️</div>
+            <div>发现</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">🔔</div>
+            <div>消息</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div>我的</div>
+        </div>
+    </div>
+    
+    <div class="modal" id="cartModal" onclick="closeCartOutside(event)">
+        <div class="modal-content">
+            <h3 class="modal-title">🛒 购物车</h3>
+            <div id="cartItems"></div>
+            <button class="submit-order" id="submitBtn" onclick="submitOrder()">
+                确认下单
+            </button>
+            <div class="close-modal" onclick="closeCart()">取消</div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    <div class="dice-animation" id="diceAnimation">🎲</div>
+    
+    <script>
+        let cart = [];
+        let isSubmitting = false;
+        
+        function addToCart(name, price) {
+            cart.push({ name, price, time: new Date().toLocaleString('zh-CN') });
+            updateCart();
+            showToast('已加入购物车 ✓');
+            
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+        }
+        
+        function updateCart() {
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const count = cart.length;
+            
+            document.getElementById('cartTotal').textContent = total;
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('orderBtn').disabled = count === 0;
+            
+            const badge = document.getElementById('cartBadge');
+            if (count > 0) {
+                badge.style.display = 'flex';
+                badge.textContent = count > 99 ? '99+' : count;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+        
+        function showCart() {
+            if (cart.length === 0) return;
+            
+            const modal = document.getElementById('cartModal');
+            const cartItems = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart">购物车是空的哦~</div>';
+            } else {
+                cartItems.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">💚 ${item.price}</div>
+                        <button class="remove-btn" onclick="removeFromCart(${index})">×</button>
+                    </div>
+                `).join('');
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+        
+        function closeCartOutside(event) {
+            if (event.target.id === 'cartModal') {
+                closeCart();
+            }
+        }
+        
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+            showCart();
+        }
+        
+        async function submitOrder() {
+            if (cart.length === 0 || isSubmitting) return;
+            
+            isSubmitting = true;
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span>提交中...';
+            
+            try {
+                // 准备订单数据
+                const orderData = {
+                    items: cart.map(item => item.name),
+                    total: cart.length,
+                    time: new Date().toLocaleString('zh-CN'),
+                    message: cart.join('、')
+                };
+                
+                // 发送到服务器（需要替换为您的实际API地址）
+                const response = await fetch('/api/order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                if (response.ok) {
+                    showToast('下单成功！小唐马上就到~ 💕');
+                    cart = [];
+                    updateCart();
+                    closeCart();
+                    
+                    if (navigator.vibrate) {
+                        navigator.vibrate([100, 50, 100]);
+                    }
+                } else {
+                    throw new Error('提交失败');
+                }
+            } catch (error) {
+                console.error('提交失败:', error);
+                showToast('提交失败，请重试');
+            } finally {
+                isSubmitting = false;
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '确认下单';
+            }
+        }
+        
+        function randomOrder() {
+            const dice = document.getElementById('diceAnimation');
+            dice.style.display = 'block';
+            
+            const menuItems = ['快来陪我！', '你在干嘛', '想要亲亲', '捏脸', '摸摸头'];
+            
+            setTimeout(() => {
+                dice.style.display = 'none';
+                const selected = menuItems[Math.floor(Math.random() * menuItems.length)];
+                addToCart(selected, 0);
+                showToast(`命运选择了: ${selected} 🎉`);
+            }, 1500);
+        }
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
+        
+        // 分类切换
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
