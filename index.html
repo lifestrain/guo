@@ -186,7 +186,7 @@
                 <div class="menu-icon">😺</div>
                 <div class="menu-details">
                     <h3>想要陪陪</h3>
-                    <p>👫👫👫 陪伴是最长情的告白</p>
+                    <p>👫👫 陪伴是最长情的告白</p>
                 </div>
                 <button class="add-btn" onclick="addToCart('想要陪陪')">+</button>
             </div>
@@ -256,7 +256,6 @@
             const orderMessage = cart.map(item => item.name).join('、');
             const time = new Date().toLocaleString('zh-CN');
             
-            // 通过Server酱发送通知（直接在浏览器端调用）
             const sendKey = 'SCT334440TlnZcVW7VOnAYeJqsYYEfSUzA';
             const title = '🎉 收到新订单啦！';
             const desp = `## 小猫厨房新订单\n\n**订单内容：** ${orderMessage}\n\n**下单时间：** ${time}\n\n**订单数量：** ${cart.length} 项\n\n---\n💕 快去看看吧！`;
