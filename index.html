@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>小猫厨房 🐱</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 30px 20px; text-align: center; }
+        .header h1 { color: white; font-size: 28px; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .header p { color: white; font-size: 16px; opacity: 0.95; }
+        .menu { padding: 20px; }
+        .menu-title { font-size: 22px; color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #43e97b; }
+        .menu-item { display: flex; align-items: center; padding: 15px; margin-bottom: 15px; background: #f8f9fa; border-radius: 12px; transition: all 0.3s; }
+        .menu-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .menu-icon { font-size: 40px; margin-right: 15px; }
+        .menu-details { flex: 1; }
+        .menu-details h3 { color: #333; font-size: 18px; margin-bottom: 5px; }
+        .menu-details p { color: #666; font-size: 14px; }
+        .add-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: #43e97b; color: white; font-size: 24px; cursor: pointer; transition: all 0.3s; }
+        .add-btn:hover { background: #38f9d7; transform: scale(1.1); }
+        .cart-section { padding: 20px; background: #fff3cd; }
+        .cart-title { font-size: 20px; color: #333; margin-bottom: 15px; }
+        .cart-item { display: flex; justify-content: space-between; padding: 10px; background: white; border-radius: 8px; margin-bottom: 10px; }
+        .total { font-size: 18px; font-weight: bold; color: #e74c3c; margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd; }
+        .submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border: none; border-radius: 12px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: all 0.3s; }
+        .submit-btn:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(67, 233, 123, 0.4); }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #43e97b; color: white; padding: 12px 25px; border-radius: 25px; font-size: 16px; z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+        .toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐱 小猫厨房 🐱</h1>
+            <p>今天想吃什么呢？💕</p>
+        </div>
+        
+        <div class="menu">
+            <h2 class="menu-title">📋 菜单</h2>
+            
+            <div class="menu-item">
+                <div class="menu-icon">😽</div>
+                <div class="menu-details">
+                    <h3>想要亲亲</h3>
+                    <p>😙😙😙 亲亲抱抱举高高</p>
+                </div>
+                <button class="add-btn" onclick="addToCart('想要亲亲', 0)">+</button>
+            </div>
+            
+            <div class="menu-item">
+                <div class="menu-icon">😻</div>
+                <div class="menu-details">
+                    <h3>想要贴贴</h3>
+                    <p>🤗🤗 贴贴抱抱蹭蹭</p>
+                </div>
+                <button class="add-btn" onclick="addToCart('想要贴贴', 0)">+</button>
+            </div>
+            
+            <div class="menu-item">
+                <div class="menu-icon">😹</div>
+                <div class="menu-details">
+                    <h3>想要抱抱</h3>
+                    <p>🤗🤗🤗 熊抱搂抱抱</p>
+                </div>
+                <button class="add-btn" onclick="addToCart('想要抱抱', 0)">+</button>
+            </div>
+            
+            <div class="menu-item">
+                <div class="menu-icon">😺</div>
+                <div class="menu-details">
+                    <h3>想要陪陪</h3>
+                    <p>👫👫👫 陪伴是最长情的告白</p>
+                </div>
+                <button class="add-btn" onclick="addToCart('想要陪陪', 0)">+</button>
+            </div>
+            
+            <div class="menu-item">
+                <div class="menu-icon">😸</div>
+                <div class="menu-details">
+                    <h3>想要夸夸</h3>
+                    <p>✨✨✨ 你最棒啦</p>
+                </div>
+                <button class="add-btn" onclick="addToCart('想要夸夸', 0)">+</button>
+            </div>
+        </div>
+        
+        <div class="cart-section" id="cartSection" style="display:none;">
+            <h2 class="cart-title">🛒 我的点单</h2>
+            <div id="cartItems"></div>
+            <button class="submit-btn" onclick="submitOrder()">✨ 提交点单 ✨</button>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        let cart = [];
+        
+        function addToCart(name, price) {
+            cart.push({ name, price, time: new Date().toLocaleString('zh-CN') });
+            updateCart();
+            showToast('已加入点单 ✓');
+        }
+        
+        function updateCart() {
+            const cartSection = document.getElementById('cartSection');
+            const cartItems = document.getElementById('cartItems');
+            
+            if (cart.length > 0) {
+                cartSection.style.display = 'block';
+                cartItems.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span style="color:#999;font-size:12px;">${index + 1}</span>
+                    </div>
+                `).join('');
+            } else {
+                cartSection.style.display = 'none';
+            }
+        }
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+        
+        async function submitOrder() {
+            if (cart.length === 0) {
+                showToast('请先选择菜品哦~');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        items: cart.map(item => item.name),
+                        total: cart.length,
+                        time: new Date().toLocaleString('zh-CN'),
+                        message: cart.map(item => item.name).join('、')
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast('🎉 点单成功！');
+                    cart = [];
+                    updateCart();
+                    setTimeout(() => {
+                        alert('💕 已通知对方，请耐心等待回复哦！');
+                    }, 500);
+                } else {
+                    showToast('提交失败，请重试');
+                }
+            } catch (error) {
+                showToast('网络错误，请检查网络');
+                console.error('提交失败:', error);
+            }
+        }
+    </script>
+</body>
+</html>
